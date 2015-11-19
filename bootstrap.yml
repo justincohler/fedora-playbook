@@ -1,0 +1,43 @@
+# This playbook sets up Fedora for JBoss productivity
+#
+# Run this playbook with the following command:
+#
+# ansible-playbook bootstrap.yml --ask-become-pass
+---
+- hosts: 127.0.0.1
+
+  user: jcohler
+
+  become: yes
+
+  vars:
+    me: jcohler
+
+  tasks:
+    
+    - name: bootstrap packages for ansible
+      shell: dnf install python-dnf libselinux-python -y 	
+
+    - name: upgrade all packages
+      command: /usr/bin/dnf -y upgrade
+    
+    - name: create .m2
+      file:  path=/home/{{me}}/.m2 state=directory mode=0755 owner={{me}} group={{me}}
+    
+    - name: copy maven settings.xml
+      copy: src=files/settings.xml dest=/home/{{me}}/.m2/settings.xml owner=jcohler group=jcohler
+
+    - name: install jdk
+      dnf: name=java-devel state=latest
+
+    - name: install node
+      dnf: name=nodejs state=latest
+    
+    - name: install gnome-tweak-tool
+      dnf: name=gnome-tweak-tool state=latest
+
+    - name: create code workspace
+      file:  path=/home/{{me}}/workspaces state=directory mode=0755
+
+    - name: install google chrome
+      dnf: name=https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm state=present
