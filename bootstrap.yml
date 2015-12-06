@@ -38,7 +38,7 @@
       file:  path=/home/{{me}}/.m2 state=directory mode=0755 owner={{me}} group={{me}}
     
     - name: copy maven settings.xml
-      copy: src=files/settings.xml dest=/home/{{me}}/.m2/settings.xml owner=jcohler group=jcohler
+      copy: src=files/settings.xml dest=/home/{{me}}/.m2/settings.xml owner={{me}} group={{me}}
 
     - name: install jdk
       dnf: name=java-devel state=latest
@@ -50,7 +50,7 @@
       dnf: name=gnome-tweak-tool state=latest
 
     - name: create code workspace
-      file:  path=/home/{{me}}/workspaces state=directory mode=0755
+      file:  path=/home/{{me}}/workspaces state=directory mode=0755 owner={{me}} group={{me}}
 
     - name: install google chrome
       dnf: name=https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm state=present
